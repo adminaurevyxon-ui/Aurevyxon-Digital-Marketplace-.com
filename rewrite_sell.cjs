@@ -1,0 +1,202 @@
+const fs = require('fs');
+let code = fs.readFileSync('src/pages/Sell.tsx', 'utf8');
+
+// I will just locate the grid we just made and replace it with a vertical stack of BigDropdowns
+const startMarker = '<div className="grid grid-cols-1 md:grid-cols-2 gap-4">';
+const endMarker = '<div className="space-y-4 pt-4 border-t border-border">';
+
+const startIndex = code.indexOf(startMarker);
+const endIndex = code.indexOf(endMarker);
+
+if (startIndex === -1 || endIndex === -1) {
+    console.log("Could not find markers", startIndex, endIndex);
+    process.exit(1);
+}
+
+const bigDropdowns = `
+              {/* Discount Inputs as standard inputs first, if needed. But the user said "discount button" so maybe discount was standard? 
+                 User prompt 1: "Jahan per Tumne yah Jo button lagaya hai ke Jo discount button lagaya hai aur uske niche Jo button hai use chhodkar thoda space dekar vahan ek yah button create karo jiska Naam Mobile Apps -> yah hoga"
+                 Meaning: "Where you put the discount button, and the button below it, skip them, give some space, and create a button named Mobile Apps -> there."
+              */}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Price (USD)</label>
+                  <div className="relative">
+                    <DollarSign className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Input 
+                      type="number" 
+                      required 
+                      min="0"
+                      step="1"
+                      placeholder="249" 
+                      className="bg-muted border-border pl-9"
+                      value={formData.price}
+                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Tags (comma separated)</label>
+                  <div className="relative">
+                    <Tag className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Input 
+                      placeholder="React, Next.js, Android" 
+                      className="bg-muted border-border pl-9"
+                      value={formData.tags}
+                      onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300 mb-1">Discount Percentage (%)</label>
+                <Input 
+                  type="number" 
+                  min="0"
+                  max="100"
+                  placeholder="0" 
+                  className="bg-muted border-border max-w-[200px]"
+                  value={formData.discount_percentage}
+                  onChange={(e) => setFormData({ ...formData, discount_percentage: e.target.value })}
+                />
+              </div>
+
+              <BigDropdown 
+                label="Discount Type"
+                value={formData.discount_type}
+                options={[
+                  "Flat Amount ($ Off)", "Percentage (%) Off", "Buy 1 Get 1 Free", "Bundle Discount (multi-product)", 
+                  "Seasonal/Limited-Time Offer", "First-Time Buyer Discount", "Volume Discount (bulk license purchase)", 
+                  "Flash Sale (Time-Boxed)", "Loyalty/Repeat Buyer Discount", "Coupon Code Only"
+                ]}
+                onChange={(val) => setFormData({ ...formData, discount_type: val })}
+              />
+
+              <div className="pt-4" />
+
+              <BigDropdown 
+                label="Mobile Apps"
+                value={formData.type}
+                options={[
+                  "Utility Apps", "Social Media Apps", "E-commerce Apps", "Fitness & Health Apps", 
+                  "Finance & Banking Apps", "Education & Learning Apps", "Games (Casual)", 
+                  "Games (Hyper-Casual)", "Games (Puzzle)", "Games (Arcade)", "Productivity Apps", 
+                  "Travel & Booking Apps", "Food Delivery Apps", "Dating Apps", "News & Media Apps", 
+                  "Music & Audio Apps", "Photo & Video Editing Apps", "AR/VR Apps", "IoT Control Apps", 
+                  "Chat & Messaging Apps", "Reservation/Booking Apps", "Weather Apps", "Calculator/Utility Tools", 
+                  "QR/Barcode Scanner Apps", "Meditation & Wellness Apps", "Language Learning Apps"
+                ]}
+                onChange={(val) => setFormData({ ...formData, type: val })}
+              />
+
+              <BigDropdown 
+                label="Platform (expanded)"
+                value={formData.platform}
+                options={[
+                  "Android", "iOS", "Web (Browser-Based)", "Windows", "macOS", "Linux", "Cross-Platform", "React Native", 
+                  "Flutter", "Chrome Extension", "Firefox Extension", "WordPress", "Shopify", "Figma", "VS Code", 
+                  "Telegram Bot", "Discord Bot", "Slack App", "API/Backend Only", "Smart TV", "Wearables (watchOS/Wear OS)", 
+                  "Notion", "Adobe Creative Cloud (Photoshop/Premiere/After Effects)", "Unity", "Unreal Engine", "Roblox Studio", 
+                  "Canva", "Zapier/Make/n8n", "Blockchain/Web3 (Ethereum, Solana, Polygon)", "Standalone/Any Platform (Non-Digital Media)"
+                ]}
+                onChange={(val) => setFormData({ ...formData, platform: val })}
+              />
+
+              <BigDropdown 
+                label="Framework (expanded)"
+                value={formData.framework}
+                options={[
+                  "React", "Next.js", "Vue.js", "Nuxt.js", "Angular", "Svelte / SvelteKit", "Node.js", "Express.js", "NestJS", 
+                  "Django", "Flask", "FastAPI", "Laravel", "Ruby on Rails", "Spring Boot", "ASP.NET Core", "Flutter", 
+                  "React Native", "SwiftUI", "Jetpack Compose (Kotlin)", "Kotlin Multiplatform", "Unity", "Unreal Engine", 
+                  "Godot", "TensorFlow", "PyTorch", "Keras", "LangChain", "LlamaIndex", "Electron.js", "jQuery", "Bootstrap", 
+                  "Tailwind CSS", "Material UI", "Chakra UI", "WordPress (PHP)", "WooCommerce", "Shopify Liquid", "Solidity (Smart Contracts)", 
+                  "Web3.js / Ethers.js", "Three.js (3D/WebGL)", "Blender Python API", "Not Applicable (Non-Code Asset)", "None / Vanilla Code"
+                ]}
+                onChange={(val) => setFormData({ ...formData, framework: val })}
+              />
+
+              <BigDropdown 
+                label="License"
+                value={formData.license_type}
+                options={[
+                  "Personal Use License", "Commercial Use License", "Extended Commercial License", "Single Site License", 
+                  "Multi-Site License", "Developer License", "White-Label License", "Reseller License", "MIT License", 
+                  "GPL License", "Apache 2.0 License", "Creative Commons (CC0)", "Creative Commons (CC-BY)", "Royalty-Free License", 
+                  "Editorial Use Only License", "Exclusive License (sold once, then delisted)", "Non-Exclusive License (resellable to multiple buyers)", 
+                  "Lifetime License", "Subscription-Based License", "Print-on-Demand License", "Broadcast/Film Use License", "Attribution Required License"
+                ]}
+                onChange={(val) => setFormData({ ...formData, license_type: val })}
+              />
+
+              <BigDropdown 
+                label="Support"
+                value={formData.support_type}
+                options={[
+                  "Included — Lifetime", "Included — 1 Year", "Included — 6 Months", "Included — 90 Days", "Included — 30 Days", 
+                  "Not Included", "Priority Support (Paid Add-on)", "Community Support Only", "Email Support", "Live Chat Support", 
+                  "Phone Support", "Installation Support Included", "Custom Setup Service Available", "Documentation Only (Self-Service)"
+                ]}
+                onChange={(val) => setFormData({ ...formData, support_type: val })}
+              />
+
+              <BigDropdown 
+                label="Language"
+                value={formData.language}
+                options={[
+                  "English", "Hindi", "Spanish", "French", "German", "Portuguese", "Arabic", "Chinese (Simplified)", 
+                  "Chinese (Traditional)", "Japanese", "Korean", "Russian", "Italian", "Bengali", "Tamil", "Telugu", 
+                  "Marathi", "Gujarati", "Punjabi", "Urdu", "Turkish", "Vietnamese", "Indonesian", "Thai", "Dutch", 
+                  "Polish", "Multi-Language (i18n Ready)", "Language-Agnostic (Code/Asset Only, No UI Text)"
+                ]}
+                onChange={(val) => setFormData({ ...formData, language: val })}
+              />
+
+              <BigDropdown 
+                label="Compatibility"
+                value={formData.compatibility}
+                options={[
+                  "Android 8.0+", "Android 10+", "Android 12+", "Android 14+", "iOS 13+", "iOS 15+", "iOS 16+", "iOS 17+", 
+                  "Windows 10/11", "macOS Monterey+", "macOS Sonoma+", "Ubuntu 20.04+", "Ubuntu 22.04+", "Node.js 16+", 
+                  "Node.js 18+", "Node.js 20+", "PHP 7.4+", "PHP 8+", "Python 3.8+", "Python 3.10+", "Python 3.12+", 
+                  "All Modern Browsers (Chrome/Edge/Firefox/Safari Latest)", "React 18+", "Next.js 13+/14+", "WordPress 5.0+", 
+                  "WooCommerce 6.0+", "Unity 2021 LTS+", "Unreal Engine 5+", "Adobe CC 2023+", "Blender 3.x+", "Not Version-Dependent (Static Asset)"
+                ]}
+                onChange={(val) => setFormData({ ...formData, compatibility: val })}
+              />
+
+              <BigDropdown 
+                label="File Type"
+                value={formData.file_type}
+                options={[
+                  ".zip (Full Source Code)", ".rar", ".apk (Android Package)", ".aab (Android App Bundle)", ".ipa (iOS App)", 
+                  ".exe (Windows Installer)", ".dmg (macOS Installer)", ".apk + Full Source Code", "Source Code Only (No Build File)", 
+                  "Figma File (.fig)", "Sketch File (.sketch)", "Adobe XD (.xd)", "PSD File (Photoshop)", "AI File (Illustrator)", 
+                  "PDF Document", "EPUB/MOBI (E-books)", ".mp3/.wav/.flac (Audio)", ".mp4/.mov (Video)", ".fbx/.obj/.blend/.gltf (3D Models)", 
+                  ".ttf/.otf/.woff (Fonts)", ".pptx/.key (Presentations)", ".xlsx/.csv (Spreadsheets)", ".docx (Documents)", 
+                  "SQL Database Dump (.sql)", "JSON Dataset", "Docker Image", ".env Template Included", "Notion Template Link", "Canva Template Link"
+                ]}
+                onChange={(val) => setFormData({ ...formData, file_type: val })}
+              />
+
+              <BigDropdown 
+                label="Sale Mode"
+                value={formData.mode}
+                options={[
+                  "Unlimited (sell to unlimited buyers)", "Limited Quantity (fixed number of license slots)", "Exclusive (sold once to one buyer, then delisted)", 
+                  "Auction Style (highest bidder)", "Subscription (recurring billing)", "One-Time Purchase", "Pay-What-You-Want", 
+                  "Reserved / Pre-Order", "Bundle-Only (sold as part of a bundle)", "Free with Attribution"
+                ]}
+                onChange={(val) => setFormData({ ...formData, mode: val })}
+              />
+
+            </div>
+            <div className="space-y-4 pt-4 border-t border-border">`;
+
+// Also need to import BigDropdown at the top.
+let modified = code.substring(0, startIndex) + bigDropdowns + code.substring(endIndex + endMarker.length);
+modified = modified.replace('import { Button } from "@/components/ui/button";', 'import { Button } from "@/components/ui/button";\nimport { BigDropdown } from "@/components/BigDropdown";');
+
+fs.writeFileSync('src/pages/Sell.tsx', modified);

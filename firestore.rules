@@ -1,0 +1,177 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. USER DOMAIN
+    match /users/{userId} {
+      allow read, write: if request.auth != null;
+    }
+    match /user_profiles/{userId} {
+      allow read, write: if request.auth != null;
+    }
+    match /user_settings/{userId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // 2. SELLER DOMAIN
+    match /sellers/{sellerId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /seller_profiles/{sellerId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /seller_verifications/{sellerId} {
+      allow read, write: if request.auth != null;
+    }
+    match /seller_settings/{sellerId} {
+      allow read, write: if request.auth != null;
+    }
+    match /seller_payout_methods/{methodId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // 3. PRODUCTS DOMAIN
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /listings/{listingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /product_versions/{versionId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /categories/{catId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /product_metadata/{metaId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 4. ORDERS DOMAIN
+    match /orders/{orderId} {
+      allow read, write: if request.auth != null;
+    }
+    match /order_items/{itemId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // 5. FINANCE DOMAIN
+    match /transactions/{txId} {
+      allow read, write: if request.auth != null;
+    }
+    match /wallet_transactions/{txId} {
+      allow read, write: if request.auth != null;
+    }
+    match /commissions/{commId} {
+      allow read, write: if request.auth != null;
+    }
+    match /wallets/{walletId} {
+      allow read, write: if request.auth != null;
+    }
+    match /wallet_ledger/{ledgerId} {
+      allow read, write: if request.auth != null;
+    }
+    match /payouts/{payoutId} {
+      allow read, write: if request.auth != null;
+    }
+    match /payout_requests/{payoutId} {
+      allow read, write: if request.auth != null;
+    }
+    match /refunds/{refundId} {
+      allow read, write: if request.auth != null;
+    }
+    match /disputes/{disputeId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // 6. KYC DOMAIN
+    match /kyc_submissions/{kycId} {
+      allow read, write: if request.auth != null;
+    }
+    match /kyc_applications/{kycId} {
+      allow read, write: if request.auth != null;
+    }
+    match /kyc_documents/{docId} {
+      allow read, write: if request.auth != null;
+    }
+    match /verification_records/{recId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // 7. COMMUNICATION DOMAIN
+    match /messages/{messageId} {
+      allow read, write: if request.auth != null;
+    }
+    match /conversations/{convId} {
+      allow read, write: if request.auth != null;
+    }
+    match /notifications/{notifId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // 8. ADMIN DOMAIN
+    match /admin_roles/{roleId} {
+      allow read, write: if request.auth != null;
+    }
+    match /admin_permissions/{permId} {
+      allow read, write: if request.auth != null;
+    }
+    match /platform_settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /system_settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /commission_settings/{commSettingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /feature_flags/{flagId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /audit_logs/{logId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // 9. SUPPORT / CMS DOMAIN & PROMOTIONS
+    match /tickets/{ticketId} {
+      allow read, write: if request.auth != null;
+    }
+    match /support_tickets/{ticketId} {
+      allow read, write: if request.auth != null;
+    }
+    match /cms_pages/{pageId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /banners/{bannerId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /coupons/{couponId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Global catch-all rule
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+
+

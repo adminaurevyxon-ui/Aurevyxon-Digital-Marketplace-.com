@@ -1,0 +1,42 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // User Profile Avatar Storage
+    match /users/{userId}/profile/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId
+        && request.resource.size < 5 * 1024 * 1024
+        && (request.resource.contentType.matches('image/png') 
+            || request.resource.contentType.matches('image/jpeg') 
+            || request.resource.contentType.matches('image/jpg'));
+    }
+
+    // Seller Profile Avatar Storage
+    match /sellers/{sellerId}/profile/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && (request.auth.uid == sellerId || request.auth.token.role == 'admin')
+        && request.resource.size < 5 * 1024 * 1024
+        && (request.resource.contentType.matches('image/png') 
+            || request.resource.contentType.matches('image/jpeg') 
+            || request.resource.contentType.matches('image/jpg'));
+    }
+
+    // Admin Profile Avatar Storage
+    match /admins/{adminId}/profile/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null 
+        && (request.auth.uid == adminId || request.auth.token.email in ['jagannathsing777@gmail.com', 'admin.aurevyxon@gmail.com'])
+        && request.resource.size < 5 * 1024 * 1024
+        && (request.resource.contentType.matches('image/png') 
+            || request.resource.contentType.matches('image/jpeg') 
+            || request.resource.contentType.matches('image/jpg'));
+    }
+
+    // Default deny
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

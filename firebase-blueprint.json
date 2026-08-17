@@ -1,0 +1,149 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile document",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Seller": {
+      "title": "Seller",
+      "description": "Seller KYC and profile details",
+      "type": "object",
+      "properties": {
+        "user_id": { "type": "string" },
+        "store_name": { "type": "string" },
+        "kyc_status": { "type": "string" },
+        "updated_at": { "type": "string" }
+      },
+      "required": ["user_id"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Digital product listing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "price": { "type": "number" },
+        "status": { "type": "string" },
+        "seller_id": { "type": "string" }
+      },
+      "required": ["id", "title", "price"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Order transaction",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "buyer_id": { "type": "string" },
+        "product_id": { "type": "string" },
+        "amount": { "type": "number" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "amount"]
+    },
+    "FinanceRecord": {
+      "title": "FinanceRecord",
+      "description": "Financial ledger document",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "user_id": { "type": "string" },
+        "amount": { "type": "number" },
+        "type": { "type": "string" }
+      },
+      "required": ["id", "amount"]
+    },
+    "KycRecord": {
+      "title": "KycRecord",
+      "description": "KYC application and verification document",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "user_id": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "user_id"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Direct / Support message",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "sender_id": { "type": "string" },
+        "recipient_id": { "type": "string" },
+        "message": { "type": "string" }
+      },
+      "required": ["id", "message"]
+    },
+    "SystemSetting": {
+      "title": "SystemSetting",
+      "description": "Platform configuration setting",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "key": { "type": "string" },
+        "value": { "type": "string" }
+      },
+      "required": ["id"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Admin system audit log entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "action": { "type": "string" },
+        "performed_by": { "type": "string" }
+      },
+      "required": ["id", "action"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": { "schema": "User", "description": "User accounts" },
+    "user_profiles/{userId}": { "schema": "User", "description": "User profile details" },
+    "user_settings/{userId}": { "schema": "SystemSetting", "description": "User preference settings" },
+    "seller_profiles/{sellerId}": { "schema": "Seller", "description": "Seller store profile" },
+    "seller_verifications/{sellerId}": { "schema": "Seller", "description": "Seller verification records" },
+    "seller_settings/{sellerId}": { "schema": "SystemSetting", "description": "Seller account settings" },
+    "seller_payout_methods/{methodId}": { "schema": "FinanceRecord", "description": "Seller payout destination methods" },
+    "products/{productId}": { "schema": "Product", "description": "Marketplace products" },
+    "product_versions/{versionId}": { "schema": "Product", "description": "Product version history" },
+    "categories/{catId}": { "schema": "Product", "description": "Product category taxonomy" },
+    "product_metadata/{metaId}": { "schema": "Product", "description": "Product metadata, tags, and metrics" },
+    "orders/{orderId}": { "schema": "Order", "description": "Marketplace purchase orders" },
+    "order_items/{itemId}": { "schema": "Order", "description": "Purchased item line details" },
+    "transactions/{txId}": { "schema": "FinanceRecord", "description": "Global marketplace transactions" },
+    "commissions/{commId}": { "schema": "FinanceRecord", "description": "Platform commission earnings" },
+    "wallets/{walletId}": { "schema": "FinanceRecord", "description": "User wallet account balances" },
+    "wallet_ledger/{ledgerId}": { "schema": "FinanceRecord", "description": "Double-entry wallet transaction ledger" },
+    "payouts/{payoutId}": { "schema": "FinanceRecord", "description": "Seller payout settlements" },
+    "refunds/{refundId}": { "schema": "FinanceRecord", "description": "Customer refund records" },
+    "disputes/{disputeId}": { "schema": "FinanceRecord", "description": "Buyer/Seller dispute cases" },
+    "kyc_applications/{kycId}": { "schema": "KycRecord", "description": "Seller KYC applications" },
+    "kyc_documents/{docId}": { "schema": "KycRecord", "description": "KYC identity documents" },
+    "verification_records/{recId}": { "schema": "KycRecord", "description": "Verification history log" },
+    "messages/{messageId}": { "schema": "Message", "description": "Direct communication messages" },
+    "conversations/{convId}": { "schema": "Message", "description": "Chat conversations" },
+    "notifications/{notifId}": { "schema": "Message", "description": "User notification alerts" },
+    "admin_roles/{roleId}": { "schema": "SystemSetting", "description": "Admin access role definitions" },
+    "admin_permissions/{permId}": { "schema": "SystemSetting", "description": "Granular administrative permission flags" },
+    "platform_settings/{settingId}": { "schema": "SystemSetting", "description": "Global marketplace settings" },
+    "commission_settings/{commSettingId}": { "schema": "SystemSetting", "description": "Commission tier settings" },
+    "feature_flags/{flagId}": { "schema": "SystemSetting", "description": "System feature toggles" },
+    "audit_logs/{logId}": { "schema": "AuditLog", "description": "Immutable administrative audit trail" },
+    "support_tickets/{ticketId}": { "schema": "Message", "description": "Support ticket submissions" },
+    "cms_pages/{pageId}": { "schema": "SystemSetting", "description": "CMS static content pages" },
+    "banners/{bannerId}": { "schema": "SystemSetting", "description": "Promotional marketplace banners" }
+  }
+}

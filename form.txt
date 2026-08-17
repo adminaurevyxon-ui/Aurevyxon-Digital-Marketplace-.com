@@ -1,0 +1,140 @@
+          <form onSubmit={handleSubmit} className="space-y-6 glass-card p-6 md:p-8 rounded-2xl border border-border/20">
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-200 p-4 rounded-xl">
+                {error}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Asset Title</label>
+                <Input 
+                  required 
+                  placeholder="e.g. Apex SaaS Dashboard" 
+                  className="bg-muted border-border"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                <Textarea 
+                  required 
+                  placeholder="Describe your asset in detail..." 
+                  className="bg-muted border-border min-h-[120px]"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Custom Badge/Description Text</label>
+                <Input 
+                  placeholder="e.g. Limited Edition, Premium Version..." 
+                  className="bg-muted border-border"
+                  value={formData.custom_badge}
+                  onChange={(e) => setFormData({ ...formData, custom_badge: e.target.value })}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Price (USD)</label>
+                  <div className="relative">
+                    <DollarSign className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Input 
+                      type="number" 
+                      required 
+                      min="0"
+                      step="1"
+                      placeholder="249" 
+                      className="bg-muted border-border pl-9"
+                      value={formData.price}
+                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Tags (comma separated)</label>
+                  <div className="relative">
+                    <Tag className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Input 
+                      placeholder="React, Next.js, Android" 
+                      className="bg-muted border-border pl-9"
+                      value={formData.tags}
+                      onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                    />
+                  </div>
+                </div>
+              </div>
+              
+
+            <div className="space-y-4 pt-4 border-t border-border">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Cover Image (Required)</label>
+                <div className="border-2 border-dashed border-border rounded-xl p-6 text-center hover:bg-white/[0.02] transition-colors cursor-pointer relative overflow-hidden">
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    required
+                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" 
+                    onChange={handleImageChange}
+                  />
+                  {imagePreview ? (
+                    <img src={imagePreview} className="absolute inset-0 w-full h-full object-cover opacity-30" alt="" />
+                  ) : null}
+                  <div className="relative z-20 pointer-events-none">
+                    <UploadCloud className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm font-medium text-gray-300">{imageFile ? imageFile.name : "Click or drag to upload cover image"}</p>
+                    <p className="text-xs text-gray-500 mt-1">JPG, PNG up to 5MB</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Screenshots (Exactly 8 Required)</label>
+                 <div className="border-2 border-dashed border-border rounded-xl p-6 text-center hover:bg-white/[0.02] transition-colors cursor-pointer relative">
+                    <input 
+                      type="file" 
+                      accept="image/png, image/jpeg" 
+                      multiple
+                      required
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" 
+                      onChange={handleScreenshotsChange}
+                    />
+                    <UploadCloud className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm font-medium text-gray-300">{screenshots.length > 0 ? `${screenshots.length} / 8 uploaded` : "Click or drag exactly 8 screenshots"}</p>
+                 </div>
+                 {screenshots.length > 0 && screenshots.length !== 8 && (
+                   <p className="text-red-400 text-xs mt-1">You currently have {screenshots.length} selected. You must have exactly 8.</p>
+                 )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Digital Asset File (ZIP/APK)</label>
+                <div className="border-2 border-dashed border-border rounded-xl p-6 text-center hover:bg-white/[0.02] transition-colors cursor-pointer relative">
+                  <input 
+                    type="file" 
+                    accept=".zip,.rar,.tar,.gz,.apk"
+                    required
+                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" 
+                    onChange={(e) => setAssetFile(e.target.files?.[0] || null)}
+                  />
+                  <LinkIcon className="w-8 h-8 text-indigo-400 mx-auto mb-2" />
+                  <p className="text-sm font-medium text-indigo-300">{assetFile ? assetFile.name : "Click or drag to upload source file (.zip, .apk)"}</p>
+                  <p className="text-xs text-gray-500 mt-1">This file will be securely delivered to buyers.</p>
+                </div>
+              </div>
+            </div>
+
+            <Button 
+              type="submit" 
+              size="lg" 
+              disabled={loading || !isAuthenticated} 
+              className="w-full h-14 text-base font-semibold bg-indigo-600 hover:bg-indigo-500 text-foreground dark:text-white"
+            >
+              {loading ? "Uploading to Aurevyxon..." : "Publish Asset"}
+            </Button>
+          </form>

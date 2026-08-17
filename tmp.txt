@@ -1,0 +1,39 @@
+  app.post("/api/admin/listings/:id/status", authenticate, requireSuperAdmin, (req, res) => {
+    const { is_approved, is_featured } = req.body;
+    try {
+      if (is_approved !== undefined) {
+         db.prepare("UPDATE listings SET is_approved = ? WHERE id = ?").run(is_approved ? 1 : 0, req.params.id);
+      }
+      if (is_featured !== undefined) {
+         db.prepare("UPDATE listings SET is_featured = ? WHERE id = ?").run(is_featured ? 1 : 0, req.params.id);
+      }
+      res.json({ success: true });
+    } catch(err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+  
+  app.delete("/api/admin/listings/:id", authenticate, requireSuperAdmin, (req, res) => {
+    try {
+      db.prepare("DELETE FROM listings WHERE id = ?").run(req.params.id);
+      res.json({ success: true });
+    } catch(err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/admin/users/:id/status", authenticate, requireSuperAdmin, (req, res) => {
+    const { is_banned, is_verified } = req.body;
+    try {
+      if (is_banned !== undefined) {
+         db.prepare("UPDATE users SET is_banned = ? WHERE id = ?").run(is_banned ? 1 : 0, req.params.id);
+      }
+      if (is_verified !== undefined) {
+         db.prepare("UPDATE users SET is_verified = ? WHERE id = ?").run(is_verified ? 1 : 0, req.params.id);
+      }
+      res.json({ success: true });
+    } catch(err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+

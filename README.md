@@ -1,11 +1,16 @@
-<div align="center">
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 
-  <h1>Built with AI Studio</h2>
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Financial Infrastructure Modules
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+The following financial infrastructure modules have been implemented:
 
-</div>
+1. **Reserve Release Job**: Releases held reserves to sellers after the configured hold period.
+2. **Reconciliation Engine**: Validates actual gateway settlements against the internal double-entry ledger.
+3. **Webhook Retry Engine**: Provides robust processing of gateway webhooks with exponential backoff and a dead-letter queue.
+4. **Fraud & Risk Engine**: Evaluates transactions and seller behaviors to assign risk scores and apply automated decisions (e.g. holds, rejections).
+5. **Payout Batch Processor**: Automates the disbursement of `Seller_Payable` balances via payment gateways.
+6. **Admin Panel Financial API**: Endpoints in `server/api/finance.ts` backing administrative dashboards.
+7. **Accounting Reports**: Utilities in `server/services/reports.ts` to generate P&L, TDS, and Settlement reports directly from the ledger.
+
+All financial transactions enforce double-entry strictness via the `LedgerEngine` and store immutable records.

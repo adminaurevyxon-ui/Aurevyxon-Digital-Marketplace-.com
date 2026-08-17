@@ -1,0 +1,8 @@
+{
+  "name": "Omniverse Marketplace",
+  "description": "Billion-dollar level digital marketplace for apps, SaaS platforms, AI systems and full business acquisitions.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
